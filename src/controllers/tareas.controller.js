@@ -26,10 +26,23 @@ export function verDetalleTarea(req, res) {
 }
 
 export function mostrarFormularioNuevaTarea(req, res) {
-  res.send(nuevaTareaPage());
+  res.send(nuevaTareaPage({}, {}));
 }
 
 export function crearTarea(req, res) {
+  const errores = {};
+  
+  if (!req.body.titulo || req.body.titulo.trim() === "") {
+    errores.titulo = "El título es requerido";
+  }
+  if (!req.body.descripcion || req.body.descripcion.trim().length < 5) {
+    errores.descripcion = "La descripción debe tener al menos 5 caracteres";
+  }
+  
+  if (Object.keys(errores).length > 0) {
+    return res.send(nuevaTareaPage(errores, req.body));
+  }
+  
   const nuevaTarea = {
     id: tareas.length + 1,
     titulo: req.body.titulo,
@@ -56,6 +69,24 @@ export function actualizarTarea(req, res) {
   if (!tarea) {
     return res.status(404).send(error404Page());
   }
+  
+  const errores = {};
+  
+  if (!req.body.titulo || req.body.titulo.trim() === "") {
+    errores.titulo = "El título es requerido";
+  }
+  if (!req.body.descripcion || req.body.descripcion.trim().length < 5) {
+    errores.descripcion = "La descripción debe tener al menos 5 caracteres";
+  }
+  
+  if (Object.keys(errores).length > 0) {
+    const tareaConValores = {
+      ...tarea,
+      ...req.body
+    };
+    return res.send(editarTareaPage(tareaConValores, errores));
+  }
+  
   tarea.titulo = req.body.titulo;
   tarea.descripcion = req.body.descripcion;
   tarea.estado = req.body.estado;

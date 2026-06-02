@@ -1,6 +1,9 @@
 import { layout } from "../layout.js";
 
-export function editarTareaPage(tarea) {
+export function editarTareaPage(tarea, errores = {}) {
+  const claseTitulo = errores.titulo ? "form-control is-invalid" : "form-control";
+  const claseDescripcion = errores.descripcion ? "form-control is-invalid" : "form-control";
+  
   return layout(
     "Editar tarea",
     `
@@ -17,18 +20,20 @@ export function editarTareaPage(tarea) {
                 <input
                   type="text"
                   name="titulo"
-                  class="form-control"
+                  class="${claseTitulo}"
                   value="${tarea.titulo}"
                 >
+                ${errores.titulo ? `<div class="invalid-feedback d-block">${errores.titulo}</div>` : ""}
               </div>
 
               <div class="mb-3">
                 <label class="form-label">Descripción</label>
                 <textarea
                   name="descripcion"
-                  class="form-control"
+                  class="${claseDescripcion}"
                   rows="4"
                 >${tarea.descripcion}</textarea>
+                ${errores.descripcion ? `<div class="invalid-feedback d-block">${errores.descripcion}</div>` : ""}
               </div>
 
               <div class="row">

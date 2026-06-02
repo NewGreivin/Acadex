@@ -14,7 +14,7 @@ export function layout(titulo, contenido) {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     </head>
 
-    <body class="bg-light">
+    <body class="bg-light d-flex flex-column min-vh-100">
 
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
         <div class="container-fluid">
@@ -45,9 +45,13 @@ export function layout(titulo, contenido) {
         </div>
       </nav>
 
-      <main class="container">
+      <main class="container flex-grow-1">
         ${contenido}
       </main>
+
+      <footer class="bg-dark text-white text-center py-2" style="font-size: 0.875rem;">
+        <p class="mb-0"><i class="bi bi-info-circle"></i> ${process.env.APP_NAME} v${process.env.APP_VERSION} © ${new Date().getFullYear()}</p>
+      </footer>
 
       <script 
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">

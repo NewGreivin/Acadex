@@ -13,8 +13,8 @@ export function detalleTareaPage(tarea) {
           <p><strong>Descripción:</strong> ${tarea.descripcion}</p>
           <p><strong>Estado:</strong> ${tarea.estado}</p>
           <p><strong>Prioridad:</strong> ${tarea.prioridad}</p>
-          <a href="/tareas" class="btn btn-secondary">Volver</a>
-          <a href="/tareas/${tarea.id}/editar" class="btn btn-warning">Editar</a>
+          <a href="/tareas" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+          <a href="/tareas/${tarea.id}/editar" class="btn btn-warning"><i class="bi bi-pencil"></i> Editar</a>
         </div>
       </div>
     `

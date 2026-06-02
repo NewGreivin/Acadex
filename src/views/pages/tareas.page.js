@@ -18,7 +18,7 @@ export function tareasPage(tareas) {
   let contenido = `
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>Lista de tareas</h1>
-      <a href="/tareas/nueva" class="btn btn-primary">Nueva tarea</a>
+      <a href="/tareas/nueva" class="btn btn-primary"><i class="bi bi-plus"></i> Nueva tarea</a>
     </div>
 
     <div class="card mb-4 shadow-sm">
@@ -35,7 +35,7 @@ export function tareasPage(tareas) {
           </div>
           <div class="col-md-4">
             <button type="submit" class="btn btn-outline-primary w-100">
-              Filtrar
+              <i class="bi bi-funnel"></i> Filtrar
             </button>
           </div>
         </form>
@@ -49,39 +49,52 @@ export function tareasPage(tareas) {
         No hay tareas registradas.
       </div>
     `;
-  }
-
-  tareas.forEach((tarea) => {
+  } else {
     contenido += `
-      <div class="card mb-3 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">${tarea.titulo}</h5>
-          <p class="card-text">${tarea.descripcion}</p>
-          
-          <span class="badge ${obtenerBadgeEstado(tarea.estado)}">
-            ${tarea.estado}
-          </span>
-          <span class="badge ${obtenerBadgePrioridad(tarea.prioridad)}">
-            Prioridad ${tarea.prioridad}
-          </span>
+      <div class="table-responsive">
+        <table class="table table-hover shadow-sm">
+          <thead class="table-dark">
+            <tr>
+              <th>Título</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+              <th>Prioridad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
 
-          <div class="mt-3">
-            <a href="/tareas/${tarea.id}" class="btn btn-sm btn-outline-primary">
-              Ver detalle
-            </a>
-            <a href="/tareas/${tarea.id}/editar" class="btn btn-sm btn-outline-warning">
-              Editar
-            </a>
-            <form action="/tareas/${tarea.id}/eliminar" method="POST" class="d-inline">
-              <button type="submit" class="btn btn-sm btn-outline-danger">
-                Eliminar
-              </button>
-            </form>
-          </div>
-        </div>
+    tareas.forEach((tarea) => {
+      contenido += `
+            <tr>
+              <td><strong>${tarea.titulo}</strong></td>
+              <td>${tarea.descripcion}</td>
+              <td><span class="badge ${obtenerBadgeEstado(tarea.estado)}">${tarea.estado}</span></td>
+              <td><span class="badge ${obtenerBadgePrioridad(tarea.prioridad)}">Prioridad ${tarea.prioridad}</span></td>
+              <td>
+                <a href="/tareas/${tarea.id}" class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-eye"></i> Ver
+                </a>
+                <a href="/tareas/${tarea.id}/editar" class="btn btn-sm btn-outline-warning">
+                  <i class="bi bi-pencil"></i> Editar
+                </a>
+                <form action="/tareas/${tarea.id}/eliminar" method="POST" class="d-inline">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i> Eliminar
+                  </button>
+                </form>
+              </td>
+            </tr>
+      `;
+    });
+
+    contenido += `
+          </tbody>
+        </table>
       </div>
     `;
-  });
+  }
 
   return layout("Tareas", contenido);
 }

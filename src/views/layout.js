@@ -34,6 +34,9 @@ export function layout(titulo, contenido) {
               <a class="nav-link" href="/tareas">
                 <i class="bi bi-list-task"></i> Tareas
               </a>
+              <a class="nav-link" href="/tareas/resumen">
+                <i class="bi bi-bar-chart"></i> Resumen
+              </a>
               <a class="nav-link" href="/tareas/nueva">
                 <i class="bi bi-plus-circle"></i> Nueva tarea
               </a>

@@ -8,10 +8,10 @@ function obtenerBadgeEstado(estado) {
 }
 
 function obtenerBadgePrioridad(prioridad) {
-  if (prioridad === "alta") return "bg-danger";
-  if (prioridad === "media") return "bg-warning text-dark";
-  if (prioridad === "baja") return "bg-success";
-  return "bg-secondary";
+  if (prioridad === "alta") return `<span class="badge bg-danger"><i class="bi bi-exclamation-lg"></i> Alta</span>`;
+  if (prioridad === "media") return `<span class="badge bg-warning text-dark"><i class="bi bi-dash-lg"></i> Media</span>`;
+  if (prioridad === "baja") return `<span class="badge bg-success"><i class="bi bi-check-lg"></i> Baja</span>`;
+  return `<span class="badge bg-secondary">Desconocida</span>`;
 }
 
 function obtenerAlertaMensaje(mensaje) {
@@ -95,7 +95,7 @@ export function tareasPage(tareas, mensaje) {
               <td><strong>${tarea.titulo}</strong></td>
               <td>${tarea.descripcion}</td>
               <td><span class="badge ${obtenerBadgeEstado(tarea.estado)}">${tarea.estado}</span></td>
-              <td><span class="badge ${obtenerBadgePrioridad(tarea.prioridad)}">Prioridad ${tarea.prioridad}</span></td>
+              <td>${obtenerBadgePrioridad(tarea.prioridad)}</td>
               <td>
                 <a href="/tareas/${tarea.id}" class="btn btn-sm btn-outline-primary">
                   <i class="bi bi-eye"></i> Ver

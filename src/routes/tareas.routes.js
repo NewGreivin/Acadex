@@ -8,11 +8,13 @@ import {
   mostrarFormularioEditarTarea,
   actualizarTarea,
   eliminarTarea,
+  verResumen,
 } from "../controllers/tareas.controller.js";
 
 const router = Router();
 
 router.get("/", listarTareas);
+router.get("/resumen", verResumen);
 router.get("/nueva", mostrarFormularioNuevaTarea);
 router.post("/", crearTarea);
 router.get("/:id", verDetalleTarea);

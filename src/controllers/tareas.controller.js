@@ -3,6 +3,7 @@ import { tareasPage } from "../views/pages/tareas.page.js";
 import { detalleTareaPage } from "../views/pages/detalleTarea.page.js";
 import { nuevaTareaPage } from "../views/pages/nuevaTarea.page.js";
 import { editarTareaPage } from "../views/pages/editarTarea.page.js";
+import { resumenPage } from "../views/pages/resumen.page.js";
 import { error404Page } from "../views/pages/error404.page.js";
 
 export function listarTareas(req, res) {
@@ -69,4 +70,8 @@ export function eliminarTarea(req, res) {
     tareas.splice(indice, 1);
   }
   res.redirect("/tareas?mensaje=eliminada");
+}
+
+export function verResumen(req, res) {
+  res.send(resumenPage(tareas));
 }

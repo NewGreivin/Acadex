@@ -14,12 +14,36 @@ function obtenerBadgePrioridad(prioridad) {
   return "bg-secondary";
 }
 
-export function tareasPage(tareas) {
+function obtenerAlertaMensaje(mensaje) {
+  if (mensaje === "creada") {
+    return `<div class="alert alert-success alert-dismissible fade show" role="alert">
+    ¡Tarea creada correctamente!
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>`;
+  }
+  if (mensaje === "actualizada") {
+    return `<div class="alert alert-info alert-dismissible fade show" role="alert">
+      ¡Tarea actualizada correctamente!
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>`;
+  }
+  if (mensaje === "eliminada") {
+    return `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    ¡Tarea eliminada correctamente!
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>`;
+  }
+  return '';
+}
+
+export function tareasPage(tareas, mensaje) {
   let contenido = `
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>Lista de tareas</h1>
       <a href="/tareas/nueva" class="btn btn-primary"><i class="bi bi-plus"></i> Nueva tarea</a>
     </div>
+
+    ${mensaje ? obtenerAlertaMensaje(mensaje) : ''}
 
     <div class="card mb-4 shadow-sm">
       <div class="card-body">

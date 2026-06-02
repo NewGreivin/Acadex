@@ -7,11 +7,12 @@ import { error404Page } from "../views/pages/error404.page.js";
 
 export function listarTareas(req, res) {
   const estado = req.query.estado;
+  const mensaje = req.query.mensaje;
   if (estado) {
     const tareasFiltradas = tareas.filter((tarea) => tarea.estado === estado);
-    return res.send(tareasPage(tareasFiltradas));
+    return res.send(tareasPage(tareasFiltradas, mensaje));
   }
-  res.send(tareasPage(tareas));
+  res.send(tareasPage(tareas, mensaje));
 }
 
 export function verDetalleTarea(req, res) {
@@ -36,7 +37,7 @@ export function crearTarea(req, res) {
     prioridad: req.body.prioridad,
   };
   tareas.push(nuevaTarea);
-  res.redirect("/tareas");
+  res.redirect("/tareas?mensaje=creada");
 }
 
 export function mostrarFormularioEditarTarea(req, res) {
@@ -58,7 +59,7 @@ export function actualizarTarea(req, res) {
   tarea.descripcion = req.body.descripcion;
   tarea.estado = req.body.estado;
   tarea.prioridad = req.body.prioridad;
-  res.redirect("/tareas");
+  res.redirect("/tareas?mensaje=actualizada");
 }
 
 export function eliminarTarea(req, res) {
@@ -67,5 +68,5 @@ export function eliminarTarea(req, res) {
   if (indice !== -1) {
     tareas.splice(indice, 1);
   }
-  res.redirect("/tareas");
+  res.redirect("/tareas?mensaje=eliminada");
 }

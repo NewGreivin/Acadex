@@ -1,33 +1,29 @@
 import { tareas } from "../data/tareas.data.js";
-import { tareasPage } from "../views/pages/tareas.page.js";
-import { detalleTareaPage } from "../views/pages/detalleTarea.page.js";
-import { nuevaTareaPage } from "../views/pages/nuevaTarea.page.js";
-import { editarTareaPage } from "../views/pages/editarTarea.page.js";
-import { resumenPage } from "../views/pages/resumen.page.js";
-import { error404Page } from "../views/pages/error404.page.js";
 
 export function listarTareas(req, res) {
   const estado = req.query.estado;
   const mensaje = req.query.mensaje;
   if (estado) {
     const tareasFiltradas = tareas.filter((tarea) => tarea.estado === estado);
-    return res.send(tareasPage(tareasFiltradas, mensaje));
+    return res.json((tareasFiltradas));
   }
-  res.send(tareasPage(tareas, mensaje));
+  res.json((tareas));
 }
 
 export function verDetalleTarea(req, res) {
   const id = Number(req.params.id);
   const tarea = tareas.find((tarea) => tarea.id === id);
   if (!tarea) {
-    return res.status(404).send(error404Page());
+    return res.status(404).json({error: "Tarea no encontrada"});
   }
-  res.send(detalleTareaPage(tarea));
+  res.json((tarea));
 }
 
+/*
 export function mostrarFormularioNuevaTarea(req, res) {
-  res.send(nuevaTareaPage({}, {}));
+  res.json(nuevaTareaPage({}, {}));
 }
+*/
 
 export function crearTarea(req, res) {
   const errores = {};
@@ -40,7 +36,7 @@ export function crearTarea(req, res) {
   }
   
   if (Object.keys(errores).length > 0) {
-    return res.send(nuevaTareaPage(errores, req.body));
+    return res.json(nuevaTareaPage(errores, req.body));
   }
   
   const nuevaTarea = {
@@ -51,23 +47,25 @@ export function crearTarea(req, res) {
     prioridad: req.body.prioridad,
   };
   tareas.push(nuevaTarea);
-  res.redirect("/tareas?mensaje=creada");
+  res.status(201).json({mensaje: "Tarea creada"});
 }
 
+/*
 export function mostrarFormularioEditarTarea(req, res) {
   const id = Number(req.params.id);
   const tarea = tareas.find((tarea) => tarea.id === id);
   if (!tarea) {
-    return res.status(404).send(error404Page());
+    return res.status(404).json({error: "Tarea no encontrada"});
   }
-  res.send(editarTareaPage(tarea));
+  res.json(editarTareaPage(tarea));
 }
+*/
 
 export function actualizarTarea(req, res) {
   const id = Number(req.params.id);
   const tarea = tareas.find((tarea) => tarea.id === id);
   if (!tarea) {
-    return res.status(404).send(error404Page());
+    return res.status(404).json({error: "Tarea no encontrada"});
   }
   
   const errores = {};
@@ -84,14 +82,14 @@ export function actualizarTarea(req, res) {
       ...tarea,
       ...req.body
     };
-    return res.send(editarTareaPage(tareaConValores, errores));
+    return res.json(editarTareaPage(tareaConValores, errores));
   }
   
   tarea.titulo = req.body.titulo;
   tarea.descripcion = req.body.descripcion;
   tarea.estado = req.body.estado;
   tarea.prioridad = req.body.prioridad;
-  res.redirect("/tareas?mensaje=actualizada");
+  res.json({mensaje: "Tarea actualizada"});
 }
 
 export function eliminarTarea(req, res) {
@@ -100,9 +98,16 @@ export function eliminarTarea(req, res) {
   if (indice !== -1) {
     tareas.splice(indice, 1);
   }
-  res.redirect("/tareas?mensaje=eliminada");
+  res.status(404).json({error: "Tarea no encontrada"});
 }
 
+
 export function verResumen(req, res) {
-  res.send(resumenPage(tareas));
+  const resumen = {
+    total: tareas.length,
+    completadas: tareas.filter(tarea => tarea.estado === "completada").length,
+    pendientes: tareas.filter(tarea => tarea.estado === "pendiente").length,
+    en_progreso: tareas.filter(tarea => tarea.estado === "en progreso").length
+  };
+  res.json(resumen);
 }

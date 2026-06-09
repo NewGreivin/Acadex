@@ -57,7 +57,3 @@ export function nuevaTareaPage(errores = {}, valores = {}) {
     `
   );
 }
-      </div>
-    `
-  );
-}

@@ -1,16 +1,26 @@
-# React + Vite
+# Acadex - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interfaz de usuario construida con React (Vite), React Router y Bootstrap.
+Consume la API de `../backend` mediante `fetch()`; no contiene lógica de
+negocio ni acceso a datos.
 
-Currently, two official plugins are available:
+## Variables de entorno (`.env`)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+VITE_API_URL=http://localhost:4000/api
+VITE_APP_NAME=Acadex
+VITE_APP_VERSION=1.0.0
+```
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev      # entorno de desarrollo (http://localhost:5173)
+npm run build    # build de producción en dist/
+npm run preview  # sirve el build de producción
+npm run lint      # ESLint
+```
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Ver el README en la raíz del proyecto para una descripción completa de la
+estructura y de los endpoints consumidos.

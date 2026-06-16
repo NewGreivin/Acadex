@@ -1,0 +1,1 @@
+//valores como Color, tamaño, texto, icono

@@ -4,24 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NewGreivin/Acadex.git"
+    "url": "git+https://github.com/Vini-I/Acadex.git"
   },
   "keywords": [],
-  "author": "Greivin",
+  "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/NewGreivin/Acadex/issues"
+    "url": "https://github.com/Vini-I/Acadex/issues"
   },
-  "homepage": "https://github.com/NewGreivin/Acadex#readme",
+  "homepage": "https://github.com/Vini-I/Acadex#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "pdfkit": "^0.15.0"
   }
 }

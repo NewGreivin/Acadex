@@ -1,113 +1,122 @@
 import { tareas } from "../data/tareas.data.js";
 
-export function listarTareas(req, res) {
-  const estado = req.query.estado;
-  const mensaje = req.query.mensaje;
-  if (estado) {
-    const tareasFiltradas = tareas.filter((tarea) => tarea.estado === estado);
-    return res.json((tareasFiltradas));
-  }
-  res.json((tareas));
+function generarId() {
+  return tareas.length > 0 ? Math.max(...tareas.map((t) => t.id)) + 1 : 1;
 }
 
+function validarTarea({ titulo, descripcion }) {
+  const errores = {};
+
+  if (!titulo || titulo.trim() === "") {
+    errores.titulo = "El título es obligatorio";
+  }
+
+  if (!descripcion || descripcion.trim().length < 10) {
+    errores.descripcion = "La descripción debe tener al menos 10 caracteres";
+  }
+
+  return errores;
+}
+
+// GET /api/tareas?estado=&titulo=
+export function listarTareas(req, res) {
+  const { estado, titulo } = req.query;
+  let resultado = tareas;
+
+  if (estado) {
+    resultado = resultado.filter((t) => t.estado === estado);
+  }
+
+  if (titulo) {
+    const busqueda = titulo.toLowerCase();
+    resultado = resultado.filter((t) =>
+      t.titulo.toLowerCase().includes(busqueda)
+    );
+  }
+
+  res.json(resultado);
+}
+
+// GET /api/tareas/resumen
+export function verResumen(req, res) {
+  const stats = {
+    total: tareas.length,
+    pendientes: tareas.filter((t) => t.estado === "pendiente").length,
+    progreso: tareas.filter((t) => t.estado === "en progreso").length,
+    completadas: tareas.filter((t) => t.estado === "completada").length,
+  };
+
+  res.json(stats);
+}
+
+// GET /api/tareas/:id
 export function verDetalleTarea(req, res) {
   const id = Number(req.params.id);
-  const tarea = tareas.find((tarea) => tarea.id === id);
+  const tarea = tareas.find((t) => t.id === id);
+
   if (!tarea) {
-    return res.status(404).json({error: "Tarea no encontrada"});
+    return res.status(404).json({ error: "Tarea no encontrada" });
   }
-  res.json((tarea));
+
+  res.json(tarea);
 }
 
-/*
-export function mostrarFormularioNuevaTarea(req, res) {
-  res.json(nuevaTareaPage({}, {}));
-}
-*/
-
+// POST /api/tareas
 export function crearTarea(req, res) {
-  const errores = {};
-  
-  if (!req.body.titulo || req.body.titulo.trim() === "") {
-    errores.titulo = "El título es requerido";
-  }
-  if (!req.body.descripcion || req.body.descripcion.trim().length < 5) {
-    errores.descripcion = "La descripción debe tener al menos 5 caracteres";
-  }
-  
+  const { titulo, descripcion, estado, prioridad } = req.body;
+  const errores = validarTarea({ titulo, descripcion });
+
   if (Object.keys(errores).length > 0) {
-    return res.json(nuevaTareaPage(errores, req.body));
+    return res.status(400).json({ errores });
   }
-  
+
   const nuevaTarea = {
-    id: tareas.length + 1,
-    titulo: req.body.titulo,
-    descripcion: req.body.descripcion,
-    estado: req.body.estado,
-    prioridad: req.body.prioridad,
+    id: generarId(),
+    titulo: titulo.trim(),
+    descripcion: descripcion.trim(),
+    estado: estado || "pendiente",
+    prioridad: prioridad || "media",
   };
+
   tareas.push(nuevaTarea);
-  res.status(201).json({mensaje: "Tarea creada"});
+
+  res.status(201).json(nuevaTarea);
 }
 
-/*
-export function mostrarFormularioEditarTarea(req, res) {
-  const id = Number(req.params.id);
-  const tarea = tareas.find((tarea) => tarea.id === id);
-  if (!tarea) {
-    return res.status(404).json({error: "Tarea no encontrada"});
-  }
-  res.json(editarTareaPage(tarea));
-}
-*/
-
+// PUT /api/tareas/:id
 export function actualizarTarea(req, res) {
   const id = Number(req.params.id);
-  const tarea = tareas.find((tarea) => tarea.id === id);
+  const tarea = tareas.find((t) => t.id === id);
+
   if (!tarea) {
-    return res.status(404).json({error: "Tarea no encontrada"});
+    return res.status(404).json({ error: "Tarea no encontrada" });
   }
-  
-  const errores = {};
-  
-  if (!req.body.titulo || req.body.titulo.trim() === "") {
-    errores.titulo = "El título es requerido";
-  }
-  if (!req.body.descripcion || req.body.descripcion.trim().length < 5) {
-    errores.descripcion = "La descripción debe tener al menos 5 caracteres";
-  }
-  
+
+  const { titulo, descripcion, estado, prioridad } = req.body;
+  const errores = validarTarea({ titulo, descripcion });
+
   if (Object.keys(errores).length > 0) {
-    const tareaConValores = {
-      ...tarea,
-      ...req.body
-    };
-    return res.json(editarTareaPage(tareaConValores, errores));
+    return res.status(400).json({ errores });
   }
-  
-  tarea.titulo = req.body.titulo;
-  tarea.descripcion = req.body.descripcion;
-  tarea.estado = req.body.estado;
-  tarea.prioridad = req.body.prioridad;
-  res.json({mensaje: "Tarea actualizada"});
+
+  tarea.titulo = titulo.trim();
+  tarea.descripcion = descripcion.trim();
+  tarea.estado = estado || tarea.estado;
+  tarea.prioridad = prioridad || tarea.prioridad;
+
+  res.json(tarea);
 }
 
+// DELETE /api/tareas/:id
 export function eliminarTarea(req, res) {
   const id = Number(req.params.id);
-  const indice = tareas.findIndex((tarea) => tarea.id === id);
-  if (indice !== -1) {
-    tareas.splice(indice, 1);
+  const indice = tareas.findIndex((t) => t.id === id);
+
+  if (indice === -1) {
+    return res.status(404).json({ error: "Tarea no encontrada" });
   }
-  res.status(404).json({error: "Tarea no encontrada"});
-}
 
+  tareas.splice(indice, 1);
 
-export function verResumen(req, res) {
-  const resumen = {
-    total: tareas.length,
-    completadas: tareas.filter(tarea => tarea.estado === "completada").length,
-    pendientes: tareas.filter(tarea => tarea.estado === "pendiente").length,
-    en_progreso: tareas.filter(tarea => tarea.estado === "en progreso").length
-  };
-  res.json(resumen);
+  res.json({ mensaje: "Tarea eliminada" });
 }

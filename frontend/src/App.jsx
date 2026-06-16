@@ -1,23 +1,25 @@
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import TareasPage from "./pages/TareasPage.jsx";
+import DetalleTareaPage from "./pages/DetalleTareaPage.jsx";
+import TareaFormPage from "./pages/TareaFormPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+
 function App() {
   return (
-    <div className="p-5 mb-4 bg-white rounded-3 shadow-sm">
-      <h1 className="display-5 fw-bold">
-        ${"{"}appName{"}"}
-      </h1>
-      <p className="fs-5">
-        Aplicación web para administrar tareas académicas utilizando Node.js,
-        Express y Bootstrap.
-      </p>
-      <p className="text-muted">
-        Versión: ${"{"}appVersion{"}"}
-      </p>
-      <a href="/tareas" className="btn btn-primary">
-        Ver tareas
-      </a>
-      <a href="/tareas/nueva" className="btn btn-outline-primary">
-        Crear tarea
-      </a>
-    </div>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/tareas" element={<TareasPage />} />
+        <Route path="/tareas/nueva" element={<TareaFormPage />} />
+        <Route path="/tareas/:id" element={<DetalleTareaPage />} />
+        <Route path="/tareas/:id/editar" element={<TareaFormPage />} />
+        <Route path="/resumen" element={<DashboardPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }
 

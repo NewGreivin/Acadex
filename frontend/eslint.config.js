@@ -17,5 +17,11 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // El proyecto consume la API con fetch() dentro de useEffect (tal
+      // como pide el laboratorio), por lo que esta regla, pensada para
+      // empujar hacia librerías de data-fetching, se deja como advertencia.
+      'react-hooks/set-state-in-effect': 'warn',
+    },
   },
 ])
